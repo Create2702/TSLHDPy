@@ -1,2 +1,5 @@
 trash/
 __pycache__/
+build/
+dist/
+TSLHDPy.spec
