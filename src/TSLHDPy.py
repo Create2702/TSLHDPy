@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from metpy.plots import SkewT
+from metpy.plots import SkewT, Hodograph
 from metpy.units import units
 from datetime import datetime
 from siphon.simplewebservice.wyoming import WyomingUpperAir
@@ -55,6 +55,9 @@ while True:
             u_wind = df['u_wind'].values * units.knot
             v_wind = df['v_wind'].values * units.knot
             scale_pressure = [1000, 900, 800, 700, 600, 500, 400, 300, 200, 100] * units.hPa
+            clean_pressure = pressure >= 150 * units.hPa
+            u_h = u_wind[clean_pressure]
+            v_h = v_wind[clean_pressure]
 
             temperature_surface = temperature[0]
             dewpoint_surface = dewpoint[0]
@@ -86,12 +89,21 @@ while True:
             skew_t.ax.set_xlabel('Temperature | °C')
             skew_t.ax.set_ylabel('Pressure | hPa')
             skew_t.ax.set_xlim(-50, 40)
+            plt.legend()
 
             height_scale = skew_t.ax.secondary_yaxis(-0.13)
             height_scale.set_yticks(scale_pressure.m, np.round(scale_height.m, 2))
             height_scale.set_ylabel('Height | km')
 
-            plt.legend()
+            fig_h = plt.figure(figsize=(10, 10))
+            fig_h.canvas.manager.set_window_title(f'TSLHDPy v0.1.0-alpha')
+            ax = plt.subplot(1, 1, 1)
+            ax.set_title(f'Plots powered by TSLHDPy {year}-{month}-{day} {hour} UTC. Station number: {station}')
+            hodograph = Hodograph(ax, component_range=80)
+            hodograph.add_grid()
+
+            hodograph.plot(u_h, v_h)
+
             open_table(cape, cin, lcl_p, lfc_p, el_p, year, month, day, hour, station)
             plt.show()
             plt.close(fig)
