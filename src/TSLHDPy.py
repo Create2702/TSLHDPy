@@ -72,6 +72,8 @@ while True:
             srh_pos_01, srh_neg_01, srh_01 = calc.storm_relative_helicity(height, u_wind, v_wind, 1 * units.km)
             srh_pos_03, srh_neg_03, srh_03 = calc.storm_relative_helicity(height, u_wind, v_wind, 3 * units.km)
             srh_pos_06, srh_neg_06, srh_06 = calc.storm_relative_helicity(height, u_wind, v_wind, 6 * units.km)
+            u_shear, v_shear = calc.bulk_shear(pressure, u_wind, v_wind, height=height, depth=6 * units.km)
+            bulk_shear_06 = calc.wind_speed(u_shear, v_shear)
             
             fig = plt.figure(figsize=(10, 10))
             fig.canvas.manager.set_window_title('TSLHDPy - v0.1.0-alpha')
@@ -108,7 +110,7 @@ while True:
 
             hodograph.plot(u_h, v_h, color='red')
 
-            open_table(cape, cin, lcl_p, lfc_p, el_p, srh_01, srh_03, srh_06, year, month, day, hour, station)
+            open_table(cape, cin, lcl_p, lfc_p, el_p, srh_01, srh_03, srh_06, bulk_shear_06, year, month, day, hour, station)
 
             plt.show()
             plt.clf()
