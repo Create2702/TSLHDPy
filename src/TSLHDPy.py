@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from metpy.plots import SkewT
+from metpy.plots import SkewT, Hodograph
 from metpy.units import units
 from datetime import datetime
 from siphon.simplewebservice.wyoming import WyomingUpperAir
@@ -8,7 +8,7 @@ import requests
 from table import open_table
 import numpy as np
 
-print('----- TSLHDPy v0.1.0-alpha -----')
+print('----- TSLHDPy v0.2.0-alpha -----')
 while True:
     try:
         year = int(input('>> Year: '))
@@ -54,7 +54,11 @@ while True:
             dewpoint = df['dewpoint'].values * units.degC
             u_wind = df['u_wind'].values * units.knot
             v_wind = df['v_wind'].values * units.knot
+            height = df['height'].values * units.meters
             scale_pressure = [1000, 900, 800, 700, 600, 500, 400, 300, 200, 100] * units.hPa
+            clean_pressure = pressure >= 150 * units.hPa
+            u_h = u_wind[clean_pressure]
+            v_h = v_wind[clean_pressure]
 
             temperature_surface = temperature[0]
             dewpoint_surface = dewpoint[0]
@@ -65,9 +69,14 @@ while True:
             el_p, el_t = calc.el(pressure, temperature, dewpoint, parcel_line)
             cape, cin = calc.cape_cin(pressure, temperature, dewpoint, parcel_line)
             scale_height = calc.pressure_to_height_std(scale_pressure)
-
+            srh_pos_01, srh_neg_01, srh_01 = calc.storm_relative_helicity(height, u_wind, v_wind, 1 * units.km)
+            srh_pos_03, srh_neg_03, srh_03 = calc.storm_relative_helicity(height, u_wind, v_wind, 3 * units.km)
+            srh_pos_06, srh_neg_06, srh_06 = calc.storm_relative_helicity(height, u_wind, v_wind, 6 * units.km)
+            u_shear, v_shear = calc.bulk_shear(pressure, u_wind, v_wind, height=height, depth=6 * units.km)
+            bulk_shear_06 = calc.wind_speed(u_shear, v_shear)
+            
             fig = plt.figure(figsize=(10, 10))
-            fig.canvas.manager.set_window_title('TSLHDPy - v0.1.0-alpha')
+            fig.canvas.manager.set_window_title('TSLHDPy - v0.2.0-alpha')
             skew_t = SkewT(fig)
 
             skew_t.shade_cape(pressure, temperature, parcel_line)
@@ -86,12 +95,23 @@ while True:
             skew_t.ax.set_xlabel('Temperature | °C')
             skew_t.ax.set_ylabel('Pressure | hPa')
             skew_t.ax.set_xlim(-50, 40)
+            plt.legend()
 
             height_scale = skew_t.ax.secondary_yaxis(-0.13)
             height_scale.set_yticks(scale_pressure.m, np.round(scale_height.m, 2))
             height_scale.set_ylabel('Height | km')
 
-            plt.legend()
-            open_table(cape, cin, lcl_p, lfc_p, el_p, year, month, day, hour, station)
+            fig_h = plt.figure(figsize=(10, 10))
+            fig_h.canvas.manager.set_window_title(f'TSLHDPy v0.2.0-alpha')
+            ax = plt.subplot(1, 1, 1)
+            ax.set_title(f'Plots powered by TSLHDPy {year}-{month}-{day} {hour} UTC. Station number: {station}')
+            hodograph = Hodograph(ax, component_range=80)
+            hodograph.add_grid()
+
+            hodograph.plot(u_h, v_h, color='red')
+
+            open_table(cape, cin, lcl_p, lfc_p, el_p, srh_01, srh_03, srh_06, bulk_shear_06, year, month, day, hour, station)
+
             plt.show()
-            plt.close(fig)
+            plt.clf()
+            plt.close('all')
