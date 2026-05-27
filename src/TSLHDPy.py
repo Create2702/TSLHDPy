@@ -54,6 +54,7 @@ while True:
             dewpoint = df['dewpoint'].values * units.degC
             u_wind = df['u_wind'].values * units.knot
             v_wind = df['v_wind'].values * units.knot
+            height = df['height'].values * units.meters
             scale_pressure = [1000, 900, 800, 700, 600, 500, 400, 300, 200, 100] * units.hPa
             clean_pressure = pressure >= 150 * units.hPa
             u_h = u_wind[clean_pressure]
@@ -68,7 +69,10 @@ while True:
             el_p, el_t = calc.el(pressure, temperature, dewpoint, parcel_line)
             cape, cin = calc.cape_cin(pressure, temperature, dewpoint, parcel_line)
             scale_height = calc.pressure_to_height_std(scale_pressure)
-
+            srh_pos_01, srh_neg_01, srh_01 = calc.storm_relative_helicity(height, u_wind, v_wind, 1 * units.km)
+            srh_pos_03, srh_neg_03, srh_03 = calc.storm_relative_helicity(height, u_wind, v_wind, 3 * units.km)
+            srh_pos_06, srh_neg_06, srh_06 = calc.storm_relative_helicity(height, u_wind, v_wind, 6 * units.km)
+            
             fig = plt.figure(figsize=(10, 10))
             fig.canvas.manager.set_window_title('TSLHDPy - v0.1.0-alpha')
             skew_t = SkewT(fig)
@@ -102,8 +106,10 @@ while True:
             hodograph = Hodograph(ax, component_range=80)
             hodograph.add_grid()
 
-            hodograph.plot(u_h, v_h)
+            hodograph.plot(u_h, v_h, color='red')
 
-            open_table(cape, cin, lcl_p, lfc_p, el_p, year, month, day, hour, station)
+            open_table(cape, cin, lcl_p, lfc_p, el_p, srh_01, srh_03, srh_06, year, month, day, hour, station)
+
             plt.show()
-            plt.close(fig)
+            plt.clf()
+            plt.close('all')
