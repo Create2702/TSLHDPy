@@ -8,7 +8,7 @@ import requests
 from table import open_table
 import numpy as np
 
-print('----- TSLHDPy v0.1.0-alpha -----')
+print('----- TSLHDPy v0.2.0-alpha -----')
 while True:
     try:
         year = int(input('>> Year: '))
@@ -76,7 +76,7 @@ while True:
             bulk_shear_06 = calc.wind_speed(u_shear, v_shear)
             
             fig = plt.figure(figsize=(10, 10))
-            fig.canvas.manager.set_window_title('TSLHDPy - v0.1.0-alpha')
+            fig.canvas.manager.set_window_title('TSLHDPy - v0.2.0-alpha')
             skew_t = SkewT(fig)
 
             skew_t.shade_cape(pressure, temperature, parcel_line)
@@ -102,7 +102,7 @@ while True:
             height_scale.set_ylabel('Height | km')
 
             fig_h = plt.figure(figsize=(10, 10))
-            fig_h.canvas.manager.set_window_title(f'TSLHDPy v0.1.0-alpha')
+            fig_h.canvas.manager.set_window_title(f'TSLHDPy v0.2.0-alpha')
             ax = plt.subplot(1, 1, 1)
             ax.set_title(f'Plots powered by TSLHDPy {year}-{month}-{day} {hour} UTC. Station number: {station}')
             hodograph = Hodograph(ax, component_range=80)

@@ -15,7 +15,7 @@ def check_for_round(param):
 
 def open_table(cape, cin, lcl, lfc, el, srh_01, srh_03, srh_06, blk_shr_06, year, month, day, hour, station) -> None:
     table = plt.figure(figsize=(10, 10))
-    table.canvas.manager.set_window_title(f'TSLHDPy v0.1.0-alpha ({year}-{month}-{day} {hour} UTC. Station number: {station})')
+    table.canvas.manager.set_window_title(f'TSLHDPy v0.2.0-alpha ({year}-{month}-{day} {hour} UTC. Station number: {station})')
     ax = table.add_subplot(111)
     ax.axis('off')
     
