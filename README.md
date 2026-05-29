@@ -5,7 +5,7 @@ ___
 * Skew-T (Skew-T Log-P) is a thermodynamic diagram used in meteorology to visualize and analyze vertical profiles of temperature, humidity, pressure, and other atmospheric parameters. It allows you to assess the stability of the atmosphere, predict the weather, including the likelihood of severe thunderstorms, and determine the type of precipitation.
 ## What is Hodograph?
 * Hodograph is a vector diagram that is used to visualize wind data.
-# **How to use v0.2.0-alpha TSLHDPy?**
+# **How to use v0.2.1-alpha TSLHDPy?**
 *To use TSLHDPy, you will need to follow 5 steps to get start.*
 * **1 step**: Download the lastest version of TSLHDPy. ***You can download TSLHDPy on the "Releases" page.*** (Example photo) 👇 ![!\[Download the zip or rar archive. !\\[\\](assets/icons/Screenshot_(641).png)\](assets/icons/Screenshot_(641).png)](assets/icons/image.png)
 * **2 step**: After downloading the archive, extract its contents.
