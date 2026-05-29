@@ -41,10 +41,13 @@ while True:
         df = None
         try:
             df = WyomingUpperAir.request_data(date, station)
+        except requests.exceptions.ConnectionError:
+            print('Connection error. Check your internet and try again.')
+            continue
         except ValueError:
             print(f'No data available in {year}-{month}-{day} {hour} UTC or wrong station number. Try again.')
             continue
-        except requests.exceptions.HTTPError as req:
+        except requests.exceptions.HTTPError:
             print('The server is busy. Try again.')
             continue
 
