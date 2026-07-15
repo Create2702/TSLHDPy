@@ -7,8 +7,15 @@ import metpy.calc as calc
 import requests
 from table import open_table
 import numpy as np
+from vsbt import join
 
 print('----- TSLHDPy v0.2.1-alpha -----')
+
+while True:
+    flag = join()
+    if flag:
+        break
+
 while True:
     try:
         year = int(input('>> Year: '))
