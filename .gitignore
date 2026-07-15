@@ -3,4 +3,4 @@ __pycache__/
 build/
 dist/
 TSLHDPy.spec
-src/vsbt
+src/vsbt.py
