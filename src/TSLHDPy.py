@@ -8,12 +8,14 @@ import requests
 from table import open_table
 import numpy as np
 from client import join
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 print('----- TSLHDPy v0.3.0-alpha -----')
 
-SERVER_URL = 'http://26.57.138.195:8000'
-
-join(SERVER_URL)
+join(os.getenv('RADMIN_IP_ADRESS_AND_URL'))
     
 while True:
     try:
