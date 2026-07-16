@@ -7,15 +7,14 @@ import metpy.calc as calc
 import requests
 from table import open_table
 import numpy as np
-from vsbt import join
+from client import join
 
 print('----- TSLHDPy v0.3.0-alpha -----')
 
-while True:
-    flag = join()
-    if flag:
-        break
+SERVER_URL = 'http://26.57.138.195:8000'
 
+join(SERVER_URL)
+    
 while True:
     try:
         year = int(input('>> Year: '))
