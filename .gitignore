@@ -1,2 +1,5 @@
 __pycache__/
-
+for_me.txt
+build/
+dist/
+TSLHDPy.spec
