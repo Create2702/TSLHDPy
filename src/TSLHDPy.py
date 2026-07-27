@@ -7,16 +7,9 @@ import metpy.calc as calc
 import requests
 from table import open_table
 import numpy as np
-from client import join
-from dotenv import load_dotenv
-import os
 
-load_dotenv()
+print('----- TSLHDPy v0.2.2-alpha -----')
 
-print('----- TSLHDPy v0.3.0-alpha -----')
-
-join(os.getenv('RADMIN_IP_ADRESS_AND_URL'))
-    
 while True:
     try:
         year = int(input('>> Year: '))
@@ -56,7 +49,7 @@ while True:
             print(f'No data available in {year}-{month}-{day} {hour} UTC or wrong station number. Try again.')
             continue
         except requests.exceptions.HTTPError:
-            print('The server is busy. Try again.')
+            print('HTTP error. Please try again or download the lastest version of TSLHDPy.')
             continue
 
         if df is not None:
@@ -87,7 +80,7 @@ while True:
             bulk_shear_06 = calc.wind_speed(u_shear, v_shear)
             
             fig = plt.figure(figsize=(10, 10))
-            fig.canvas.manager.set_window_title('TSLHDPy - v0.3.0-alpha')
+            fig.canvas.manager.set_window_title('TSLHDPy - v0.2.2-alpha')
             skew_t = SkewT(fig)
 
             skew_t.shade_cape(pressure, temperature, parcel_line)
@@ -113,7 +106,7 @@ while True:
             height_scale.set_ylabel('Height | km')
 
             fig_h = plt.figure(figsize=(10, 10))
-            fig_h.canvas.manager.set_window_title(f'TSLHDPy v0.3.0-alpha')
+            fig_h.canvas.manager.set_window_title(f'TSLHDPy v0.2.2-alpha')
             ax = plt.subplot(1, 1, 1)
             ax.set_title(f'Plots powered by TSLHDPy {year}-{month}-{day} {hour} UTC. Station number: {station}')
             hodograph = Hodograph(ax, component_range=80)
